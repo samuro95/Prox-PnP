@@ -1,5 +1,3 @@
-# Prox-PnP
-
 # Proximal denoiser for convergent plug-and-play optimization with nonconvex regularization
 
 [[Paper](https://arxiv.org/abs/2201.13256)]
