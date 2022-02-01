@@ -27,31 +27,19 @@ The code relative to the Proximal (Gradient Step) Denoiser can be found in the `
 - Realize a first baseline training of the Gradient Step denoiser without constraining the spectral norm (1200 epochs) :
 ```
 cd GS_denoising
-python main_train.py --name GS_denoiser
+python main_train.py --name GS_DRUNet
 ```
-Checkpoints, tensorboard events and hyperparameters will be saved in the ```GS_denoising/logs/experiment_name``` subfolder. 
+Checkpoints, tensorboard events and hyperparameters will be saved in the ```GS_denoising/logs/GS_DRUNet``` subfolder. 
 
 - Save the trained model in the ckpts directory :  
 ```
-cp logs/GS_denoiser/version_0/checkpoints/* ckpts/GS_denoiser.ckpt
+cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/GS_DRUNet.ckpt
 ```
 
 - Finetune previous training constraining the spectral norm (15 epochs) : 
 ```
-python main_train.py --name Prox_denoiser  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
+python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
 ```
-
-
-### Testing 
-
-- Download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/Prox-DRUNet.ckpt```
-- For denoising the whole CBSD68 dataset at input Gaussian noise level 25 :
-```
-cd PnP_restoration
-python denoise.py --dataset_name CBSD68 --noise_level_img 25
-```
-Add the argument ```--extract_images``` the save the output images.
-
 
 
 
