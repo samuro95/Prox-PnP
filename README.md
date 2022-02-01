@@ -27,7 +27,7 @@ The code relative to the Proximal (Gradient Step) Denoiser can be found in the `
 - Realize a first baseline training of the Gradient Step denoiser without constraining the spectral norm (1200 epochs) :
 ```
 cd GS_denoising
-python main_train.py --name GS_denoiser --log_folder logs
+python main_train.py --name GS_denoiser
 ```
 Checkpoints, tensorboard events and hyperparameters will be saved in the ```GS_denoising/logs/experiment_name``` subfolder. 
 
@@ -38,7 +38,7 @@ cp logs/GS_denoiser/version_0/checkpoints/* ckpts/GS_denoiser.ckpt
 
 - Finetune previous training constraining the spectral norm (15 epochs) : 
 ```
-python main_train.py --name Prox_denoiser --log_folder logs --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
+python main_train.py --name Prox_denoiser  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
 ```
 
 
