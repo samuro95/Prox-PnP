@@ -419,7 +419,7 @@ class GradMatch(pl.LightningModule):
         parser.add_argument('--get_spectral_norm', dest='get_spectral_norm', action='store_true')
         parser.set_defaults(get_spectral_norm=False)
         parser.add_argument('--jacobian_loss_weight', type=float, default=0)
-        parser.add_argument('--eps_jacobian_loss', type=float, default=0.05)
+        parser.add_argument('--eps_jacobian_loss', type=float, default=0.1)
         parser.add_argument('--jacobian_loss_type', type=str, default='max')
         parser.add_argument('--n_step_eval', type=int, default=1)
         parser.add_argument('--use_post_forward_clip', dest='use_post_forward_clip', action='store_true')
