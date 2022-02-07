@@ -50,13 +50,11 @@ This repo contains parts of code taken from :
 
 ## Citation 
 ```
-@inproceedings{
-hurault2022gradient,
-title={Gradient Step Denoiser for convergent Plug-and-Play},
-author={Samuel Hurault and Arthur Leclaire and Nicolas Papadakis},
-booktitle={International Conference on Learning Representations},
-year={2022},
-url={https://openreview.net/forum?id=fPhKeld3Okz}
+@article{hurault2022proximal,
+  title={Proximal denoiser for convergent plug-and-play optimization with nonconvex regularization},
+  author={Hurault, Samuel and Leclaire, Arthur and Papadakis, Nicolas},
+  journal={arXiv preprint arXiv:2201.13256},
+  year={2022}
 }
 
 ```
