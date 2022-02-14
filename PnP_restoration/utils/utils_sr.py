@@ -253,7 +253,7 @@ def prox_solution(x, FB, FBC, F2B, FBFy, alpha, sf):
     Xest = torch.irfft(FX, 2, onesided=False)
     return Xest
 
-def grad_solution(x, FB, FBC, F2B, FBFy, sf):
+def grad_solution(x, FB, FBC, FBFy, sf):
     FBFx = cmul(FB, torch.rfft(x, 2, onesided=False))
     AFx = downsample(torch.irfft(FBFx, 2, onesided=False),sf=sf)
     STAFx = upsample(AFx, sf=sf)

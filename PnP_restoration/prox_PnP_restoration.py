@@ -172,9 +172,7 @@ class PnP_restoration():
 
         i = 0 # iteration counter
 
-        img_tensor = array2tensor(img).to(self.device) # for GPU computations (if GPU available)
-
-        self.initialize_prox(img_tensor, degradation) # prox calculus that can be done outside of the loop
+        img_tensor = array2tensor(init_im).to(self.device) # for GPU computations (if GPU available)
 
         # Initialization of the algorithm
         if self.hparams.degradation_mode == 'SR':
@@ -183,6 +181,8 @@ class PnP_restoration():
             x0 = array2tensor(x0).to(self.device)
         else:
             x0 = array2tensor(init_im).to(self.device)
+
+        self.initialize_prox(x0, degradation)  # prox calculus that can be done outside of the loop
 
         if extract_results:  # extract np images and PSNR values
             out_x = tensor2array(x0.cpu())
@@ -217,7 +217,7 @@ class PnP_restoration():
             x_old = x
             Psi_old = Psi
 
-            if self.hparams.PnP_algo == 'pGSPnP-PGD':
+            if self.hparams.PnP_algo == 'PGD':
                 # Gradient step
                 gradx = self.calculate_grad(x_old)
                 z = x_old - self.hparams.lamb*gradx
@@ -238,7 +238,7 @@ class PnP_restoration():
                 # Calculate Objective
                 F = self.calculate_F(x, z, g, img_tensor)
 
-            elif self.hparams.PnP_algo == 'pGSPnP-DRS':
+            elif self.hparams.PnP_algo == 'DRS':
                 # Denoising step
                 torch.set_grad_enabled(True)
                 Dg, N = self.denoiser_model.calculate_grad(x_old, self.hparams.sigma_denoiser / 255.)
@@ -261,7 +261,7 @@ class PnP_restoration():
                 # Final step
                 x = x_old + (z-y)
 
-            elif self.hparams.PnP_algo == 'pGSPnP-DRSdiff':
+            elif self.hparams.PnP_algo == 'DRSdiff':
 
                 # Proximal step
                 y = self.calculate_prox(x_old)
@@ -362,11 +362,8 @@ class PnP_restoration():
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.g) > 1:
-            for i in range(len(self.g)):
-                plt.plot(self.g[i], markevery=10)
-        else:
-            plt.plot(self.g[0], '-o', markersize=10)
+        for i in range(len(self.g)):
+            plt.plot(self.g[i], markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'g.png'),bbox_inches="tight")
@@ -375,11 +372,8 @@ class PnP_restoration():
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.PSNR) > 1:
-            for i in range(len(self.PSNR)):
-                plt.plot(self.PSNR[i], markevery=10)
-        else:
-            plt.plot(self.PSNR[0], '-o', markersize=10)
+        for i in range(len(self.PSNR)):
+            plt.plot(self.PSNR[i], markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'PSNR.png'),bbox_inches="tight")
@@ -389,10 +383,7 @@ class PnP_restoration():
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
         for i in range(len(self.F)):
-            if 'DRS' in self.hparams.PnP_algo :
-                plt.plot(self.Psi[i], markevery=10)
-            else :
-                plt.plot(self.F[i], markevery=10)
+            plt.plot(self.Psi[i], markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'Liapunov.png'), bbox_inches="tight")
@@ -402,27 +393,18 @@ class PnP_restoration():
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
         for i in range(len(self.F)):
-            if 'DRS' in algo_list[i]:
-                plt.plot(self.F[i], markevery=10)
-            else:
-                plt.plot(self.F[i], markevery=10)
+            plt.plot(self.F[i], markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'F.png'), bbox_inches="tight")
-
-
 
         plt.figure(4)
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.Dg) > 1:
-            for i in range(len(self.Dg)):
-                Ds_norm = [np.linalg.norm(np.array(self.Dg[i][j])) for j in range(len(self.Dg[i]))]
-                plt.plot(Ds_norm, linewidth=1.5, markevery=10)
-        else :
-            Ds_norm = [np.linalg.norm(np.array(self.Dg[0][j])) for j in range(len(self.Dg[0]))]
-            plt.plot(Ds_norm, '-o', markersize=10)
+        for i in range(len(self.Dg)):
+            Ds_norm = [np.linalg.norm(np.array(self.Dg[i][j])) for j in range(len(self.Dg[i]))]
+            plt.plot(Ds_norm, linewidth=1.5, markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'Dg.png'), bbox_inches="tight")
@@ -431,11 +413,8 @@ class PnP_restoration():
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.conv) > 1:
-            for i in range(len(self.conv)):
-                plt.plot(self.conv[i], '-o', markevery=10)
-        else:
-            plt.plot(self.conv[0], '-o', markersize=10)
+        for i in range(len(self.conv)):
+            plt.plot(self.conv[i], '-o', markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'conv_log.png'), bbox_inches="tight")
@@ -446,11 +425,8 @@ class PnP_restoration():
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.conv) > 1:
-            for i in range(len(self.conv)):
-                plt.plot(self.conv2[i], '-', markevery=10)
-        else:
-            plt.plot(self.conv2[0], '-', markersize=10)
+        for i in range(len(self.conv)):
+            plt.plot(self.conv2[i], '-', markevery=10)
         plt.plot(conv_rate[i], '--', color='red', label=r'$\mathcal{O}(\frac{1}{K})$')
         plt.semilogy()
         plt.legend()
@@ -463,11 +439,8 @@ class PnP_restoration():
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
-        if len(self.conv_sum) > 1:
-            for i in range(len(self.conv_sum)):
-                plt.plot(self.conv_sum[i], markevery=10)
-        else:
-            plt.plot(self.conv_sum[0], '-o', markersize=10)
+        for i in range(len(self.conv_sum)):
+            plt.plot(self.conv_sum[i], markevery=10)
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'conv_log_sum.png'), bbox_inches="tight")
@@ -504,8 +477,8 @@ class PnP_restoration():
     def add_specific_args(parent_parser):
         parser = ArgumentParser(parents=[parent_parser], add_help=False)
         parser.add_argument('--dataset_path', type=str, default='../datasets')
-        parser.add_argument('--pretrained_checkpoint', type=str,default='../GS_denoising/ckpts/prox-DRUNET_S-good.ckpt')
-        parser.add_argument('--PnP_algo', type=str, default='pGSPnP-PGD')
+        parser.add_argument('--pretrained_checkpoint', type=str,default='../GS_denoising/ckpts/Prox_DRUNet.ckpt')
+        parser.add_argument('--PnP_algo', type=str, default='PGD')
         parser.add_argument('--dataset_name', type=str, default='CBSD68')
         parser.add_argument('--sigma_denoiser', type=float)
         parser.add_argument('--sigma_k_denoiser', type=float)

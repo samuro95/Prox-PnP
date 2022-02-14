@@ -41,7 +41,7 @@ def denoise():
         if not os.path.exists(exp_out_path):
             os.mkdir(exp_out_path)
 
-    print('\n GS-DRUNET denoising with image sigma:{:.3f} \n'.format(hparams.noise_level_img))
+    print('\n Prox-DRUNet denoising with image sigma:{:.3f} \n'.format(hparams.noise_level_img))
 
     psnr_list = []
 
