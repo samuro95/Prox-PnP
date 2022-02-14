@@ -34,10 +34,48 @@ Checkpoints, tensorboard events and hyperparameters will be saved in the ```GS_d
 ```
 cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/GS_DRUNet.ckpt
 ```
+We also provide pretrained checkpoint at https://drive.google.com/file/d/1IOBH2fNe52NrchH7mLD1JcZs5TuBtr-S/view?usp=sharing
 
 - Finetune previous training constraining the spectral norm (15 epochs) : 
 ```
-python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
+python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_DRUNet.ckpt --jacobian_loss_weight 1e-3 
+```
+- Save the trained model in the ckpts directory :  
+```
+cp logs/Prox_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
+```
+
+### Testing
+
+- Download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/GSDRUNet.ckpt```
+- For denoising the whole CBSD68 dataset at input Gaussian noise level 25 :
+```
+cd PnP_restoration
+python denoise.py --dataset_name CBSD68 --noise_level_img 25
+```
+Add the argument ```--extract_images``` the save the output images.
+
+## Plug-and-Play Image Restoration (Prox-PnP)
+
+### Deblurring
+
+- If not already done, download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/GSDRUNet.ckpt```
+- Chose the PnP algorithm in {```PGD```,```DRS```,```DRSdiff```} and the input Gaussian noise level in {```2.55```,```7.65```,```12.75```}
+- For instance, for deblurring the CBSD68 images with the algorithm ```DRS```, at input Gaussian noise level ```7.65```, sequentially blurred with the 10 different kernels exposed in the paper:
+```
+cd PnP_restoration
+python deblur.py --dataset_name CBSD68 --PnP_algo DRS --noise_level_img 7.65 
+```
+
+Add the argument ```--extract_images``` the save the output images and ```--extract_curves``` the save convergence curves.
+
+
+### Super-resolution
+
+For performing super-resolution of CBSD10 images, downscaled with scale ```sf```, with the algorithm ```DRS```, at Gaussian noise level ```7.65```, and  sequentially blurred with the 4 different kernels exposed in the paper:
+```
+cd PnP_restoration
+python SR.py --dataset_name CBSD68 --PnP_algo DRS --noise_level_img 7.65 --sf 2
 ```
 
 
