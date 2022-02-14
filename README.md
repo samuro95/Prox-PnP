@@ -41,7 +41,7 @@ python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_c
 ```
 - Save the trained model in the ckpts directory :  
 ```
-cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
+cp logs/Prox_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
 ```
 
 
