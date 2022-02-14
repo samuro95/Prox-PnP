@@ -47,6 +47,45 @@ cp logs/Prox_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
 
 ### Testing
 
+- Download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/GSDRUNet.ckpt```
+- For denoising the whole CBSD68 dataset at input Gaussian noise level 25 :
+```
+cd PnP_restoration
+python denoise.py --dataset_name CBSD68 --noise_level_img 25
+```
+Add the argument ```--extract_images``` the save the output images.
+
+## Plug-and-Play Image Restoration (Prox-PnP)
+
+### Deblurring
+
+- If not already done, download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/GSDRUNet.ckpt```
+- For deblurring the CBSD68 images at input Gaussian noise level ```7.65```, sequentially blurred with the 10 different kernels exposed in the paper:
+```
+cd PnP_restoration
+python deblur.py --dataset_name CBSD68 --noise_level_img 7.65 
+```
+
+Add the argument ```--extract_images``` the save the output images and ```--extract_curves``` the save convergence curves.
+
+
+### Super-resolution
+
+For performing super-resolution of CBSD10 images, downscaled with scale ```sf```, Gaussian noise level ```7.65```, and  sequentially blurred with the 4 different kernels exposed in the paper:
+```
+cd PnP_restoration
+python SR.py --dataset_name CBSD10 --noise_level_img 7.65 --sf 2
+```
+
+### Inpainting
+Inpainting on set3C images, with randomly masked pixels (with probability ```prop_mask = 0.5```) :
+```
+cd PnP_restoration
+python inpaint.py --dataset_name set3c --prop_mask 0.5
+```
+
+
+
 
 ## Acknowledgments
 
