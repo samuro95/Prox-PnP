@@ -37,9 +37,12 @@ cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/GS_DRUNet.ckpt
 
 - Finetune previous training constraining the spectral norm (15 epochs) : 
 ```
-python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_denoiser.ckpt --jacobian_loss_weight 1e-3 
+python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_checkpoint ckpts/GS_DRUNet.ckpt --jacobian_loss_weight 1e-3 
 ```
-
+- Save the trained model in the ckpts directory :  
+```
+cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
+```
 
 
 ## Acknowledgments
