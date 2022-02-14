@@ -78,14 +78,6 @@ cd PnP_restoration
 python SR.py --dataset_name CBSD68 --PnP_algo DRS --noise_level_img 7.65 --sf 2
 ```
 
-### Inpainting
-Inpainting on set3C images, with randomly masked pixels (with probability ```prop_mask = 0.5```),  with the algorithm ```DRS``` :
-```
-cd PnP_restoration
-python inpaint.py --dataset_name set3c --prop_mask 0.5 --PnP_algo DRS
-```
-
-
 
 
 ## Acknowledgments
