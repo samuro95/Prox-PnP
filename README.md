@@ -34,6 +34,7 @@ Checkpoints, tensorboard events and hyperparameters will be saved in the ```GS_d
 ```
 cp logs/GS_DRUNet/version_0/checkpoints/* ckpts/GS_DRUNet.ckpt
 ```
+We also provide pretrained checkpoint at https://drive.google.com/file/d/1IOBH2fNe52NrchH7mLD1JcZs5TuBtr-S/view?usp=sharing
 
 - Finetune previous training constraining the spectral norm (15 epochs) : 
 ```
@@ -43,6 +44,8 @@ python main_train.py --name Prox_DRUNet  --resume_from_checkpoint --pretrained_c
 ```
 cp logs/Prox_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
 ```
+
+### Testing
 
 
 ## Acknowledgments
