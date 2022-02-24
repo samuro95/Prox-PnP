@@ -374,7 +374,7 @@ class GradMatch(pl.LightningModule):
         parser.set_defaults(start_from_checkpoint=False)
         parser.add_argument('--resume_from_checkpoint', dest='resume_from_checkpoint', action='store_true')
         parser.set_defaults(resume_from_checkpoint=False)
-        parser.add_argument('--pretrained_checkpoint', type=str,default='ckpts/GSDRUNet.ckpt')
+        parser.add_argument('--pretrained_checkpoint', type=str,default='ckpts/GS_DRUNet.ckpt')
         parser.add_argument('--pretrained_student', dest='pretrained_student', action='store_true')
         parser.set_defaults(pretrained_student=False)
         parser.add_argument('--n_channels', type=int, default=3)
