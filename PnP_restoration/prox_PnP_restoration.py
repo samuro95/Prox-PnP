@@ -50,10 +50,14 @@ class PnP_restoration():
         :param img: degraded image
         :param degradation: 2D blur kernel for deblurring and SR, mask for inpainting
         '''
-        if self.hparams.degradation_mode == 'deblurring' or self.hparams.degradation_mode == 'SR':
+        if self.hparams.degradation_mode == 'deblurring' :
             self.k = degradation
             self.k_tensor = array2tensor(np.expand_dims(self.k, 2)).double().to(self.device)
             self.FB, self.FBC, self.F2B, self.FBFy = utils_sr.pre_calculate_prox(img, self.k_tensor, 1)
+        elif self.hparams.degradation_mode == 'SR':
+            self.k = degradation
+            self.k_tensor = array2tensor(np.expand_dims(self.k, 2)).double().to(self.device)
+            self.FB, self.FBC, self.F2B, self.FBFy = utils_sr.pre_calculate_prox(img, self.k_tensor, 2)
         elif self.hparams.degradation_mode == 'inpainting':
             self.M = array2tensor(degradation).double().to(self.device)
             self.My = self.M*img
@@ -173,6 +177,7 @@ class PnP_restoration():
         i = 0 # iteration counter
 
         img_tensor = array2tensor(init_im).to(self.device) # for GPU computations (if GPU available)
+        self.initialize_prox(img_tensor, degradation)  # prox calculus that can be done outside of the loop
 
         # Initialization of the algorithm
         if self.hparams.degradation_mode == 'SR':
@@ -181,8 +186,6 @@ class PnP_restoration():
             x0 = array2tensor(x0).to(self.device)
         else:
             x0 = array2tensor(init_im).to(self.device)
-
-        self.initialize_prox(x0, degradation)  # prox calculus that can be done outside of the loop
 
         if extract_results:  # extract np images and PSNR values
             out_x = tensor2array(x0.cpu())

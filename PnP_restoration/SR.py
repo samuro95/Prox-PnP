@@ -64,7 +64,7 @@ def SR():
     F_list = []
 
     print(
-        '\n Prox-PnP ' + hparams.PnP_algo + 'super-resolution with image sigma:{:.3f}, model sigma:{:.3f}, lamb:{:.3f} \n'.format(
+        '\n Prox-PnP ' + hparams.PnP_algo + ' super-resolution with image sigma:{:.3f}, model sigma:{:.3f}, lamb:{:.3f} \n'.format(
             hparams.noise_level_img, hparams.sigma_denoiser, hparams.lamb))
 
 
