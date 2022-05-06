@@ -65,7 +65,7 @@ Add the argument ```--extract_images``` the save the output images.
 ```
 cd PnP_restoration
 python deblur.py --dataset_name CBSD68 --PnP_algo DRS --noise_level_img 7.65 
-```
+``` 
 
 Add the argument ```--extract_images``` the save the output images and ```--extract_curves``` the save convergence curves.
 
