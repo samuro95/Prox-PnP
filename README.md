@@ -47,7 +47,7 @@ cp logs/Prox_DRUNet/version_0/checkpoints/* ckpts/Prox_DRUNet.ckpt
 
 ### Testing
 
-- Download pretrained checkpoint from https://plmbox.math.cnrs.fr/smart-link/31ba8b54-6023-43fc-9f23-4b1aaefbea57/ and save it as ```GS_denoising/ckpts/Prox_DRUNet.ckpt```
+- Download pretrained checkpoint from https://plmbox.math.cnrs.fr/f/faf7d62213e449fa9c8a/?dl=1 and save it as ```GS_denoising/ckpts/Prox_DRUNet.ckpt```
 - For denoising the whole CBSD68 dataset at input Gaussian noise level 25 :
 ```
 cd PnP_restoration
@@ -59,7 +59,7 @@ Add the argument ```--extract_images``` the save the output images.
 
 ### Deblurring
 
-- If not already done, download pretrained checkpoint from https://plmbox.math.cnrs.fr/smart-link/31ba8b54-6023-43fc-9f23-4b1aaefbea57/ and save it as ```GS_denoising/ckpts/Prox_DRUNet.ckpt```
+- If not already done, download pretrained checkpoint from https://plmbox.math.cnrs.fr/f/faf7d62213e449fa9c8a/?dl=1 and save it as ```GS_denoising/ckpts/Prox_DRUNet.ckpt```
 - Chose the PnP algorithm in {```PGD```,```DRS```,```DRSdiff```} and the input Gaussian noise level in {```2.55```,```7.65```,```12.75```}
 - For instance, for deblurring the CBSD68 images with the algorithm ```DRS```, at input Gaussian noise level ```7.65```, sequentially blurred with the 10 different kernels exposed in the paper:
 ```
