@@ -88,12 +88,12 @@ class PnP_restoration():
 
     def calculate_grad(self, img):
         '''
-        Calculation of the proximal mapping of the data term f
+        Calculation of the gradient of the data term f
         :param img: input for the prox
-        :return: prox_f(img)
+        :return: \nabla_f(img)
         '''
         if self.hparams.degradation_mode == 'deblurring' :
-            grad = utils_sr.grad_solution(img.double(), self.FB, self.FBC, self.F2B, self.FBFy, 1)
+            grad = utils_sr.grad_solution(img.double(), self.FB, self.FBC, self.FBFy, 1)
         if self.hparams.degradation_mode == 'SR' :
             grad = utils_sr.grad_solution(img.double(), self.FB, self.FBC, self.FBFy, self.hparams.sf)
         return grad
