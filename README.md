@@ -59,7 +59,7 @@ Add the argument ```--extract_images``` the save the output images.
 
 ### Deblurring
 
-- If not already done, download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/GSDRUNet.ckpt```
+- If not already done, download pretrained checkpoint from https://drive.google.com/file/d/1aafXsJG50FHdNIBYfQZ2jRKTfY0ig6Zi/view?usp=sharing and save it as ```GS_denoising/ckpts/Prox_DRUNet.ckpt```
 - Chose the PnP algorithm in {```PGD```,```DRS```,```DRSdiff```} and the input Gaussian noise level in {```2.55```,```7.65```,```12.75```}
 - For instance, for deblurring the CBSD68 images with the algorithm ```DRS```, at input Gaussian noise level ```7.65```, sequentially blurred with the 10 different kernels exposed in the paper:
 ```
