@@ -28,8 +28,6 @@ class PnP_restoration():
         parser2 = GradMatch.add_model_specific_args(parser2)
         parser2 = GradMatch.add_optim_specific_args(parser2)
         hparams = parser2.parse_known_args()[0]
-        if 'nb_4' in self.hparams.pretrained_checkpoint :
-            hparams.DRUNET_nb = 4
         hparams.grad_matching = self.hparams.grad_matching
         hparams.act_mode = 's'
         self.denoiser_model = GradMatch(hparams)
@@ -480,7 +478,7 @@ class PnP_restoration():
     def add_specific_args(parent_parser):
         parser = ArgumentParser(parents=[parent_parser], add_help=False)
         parser.add_argument('--dataset_path', type=str, default='../datasets')
-        parser.add_argument('--pretrained_checkpoint', type=str,default='../GS_denoising/ckpts/Prox_DRUNet.ckpt')
+        parser.add_argument('--pretrained_checkpoint', type=str,default='../GS_denoising/ckpts/Prox-DRUNet.ckpt')
         parser.add_argument('--PnP_algo', type=str, default='PGD')
         parser.add_argument('--dataset_name', type=str, default='CBSD68')
         parser.add_argument('--sigma_denoiser', type=float)

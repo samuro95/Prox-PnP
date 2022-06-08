@@ -13,10 +13,6 @@ import scipy
 Copyright (c) 2020 Kai Zhang (cskaizhang@gmail.com)
 '''
 
-'''
-modified by Kai Zhang (github: https://github.com/cszn)
-03/03/2019
-'''
 
 '''
 # =================
