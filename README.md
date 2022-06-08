@@ -1,5 +1,7 @@
 # Proximal denoiser for convergent plug-and-play optimization with nonconvex regularization
 
+Code for the paper "Proximal denoiser for convergent plug-and-play optimization with nonconvex regularization" published at ICML 2022.
+
 [[Paper](https://arxiv.org/abs/2201.13256)]
 
 [Samuel Hurault](https://www.math.u-bordeaux.fr/~shurault/), [Arthur Leclaire](https://www.math.u-bordeaux.fr/~aleclaire/), [Nicolas Papadakis](https://www.math.u-bordeaux.fr/~npapadak/). \
