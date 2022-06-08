@@ -331,43 +331,20 @@ class PnP_restoration():
 
         self.conv = []
         self.PSNR = []
-        self.g = []
-        self.Dg = []
         self.F = []
-        self.Psi = []
-        self.lip_algo = []
-        self.lip_D = []
-        self.lip_Dg = []
 
-    def update_curves(self, x_list, Dx_list, psnr_tab, Dg_list, g_list, F_list, Psi_list):
+    def update_curves(self, x_list, psnr_tab, F_list):
 
         self.F.append(F_list)
-        self.Psi.append(Psi_list)
-        self.g.append(g_list)
-        self.Dg.append(Dg_list)
         self.PSNR.append(psnr_tab)
         self.conv.append(np.array([(np.linalg.norm(x_list[k + 1] - x_list[k]) ** 2) for k in range(len(x_list) - 1)]) / np.sum(np.abs(x_list[0]) ** 2))
-        self.lip_algo.append(np.sqrt(np.array([np.sum(np.abs(x_list[k + 1] - x_list[k]) ** 2) for k in range(1, len(x_list) - 1)]) / np.array([np.sum(np.abs(x_list[k] - x_list[k - 1]) ** 2) for k in range(1, len(x_list[:-1]))])))
-        self.lip_D.append(np.sqrt(np.array([np.sum(np.abs(Dx_list[i + 2] - Dx_list[i+1]) ** 2) for i in range(len(Dx_list) - 2)]) / np.array([np.sum(np.abs(x_list[i+1] - x_list[i]) ** 2) for i in range(len(Dx_list) - 2)])))
-        self.lip_Dg.append(np.sqrt(np.array([np.sum(np.abs(Dg_list[i + 2] - Dg_list[i+1]) ** 2) for i in range(len(Dx_list) - 2)]) / np.array([np.sum(np.abs(x_list[i+1] - x_list[i]) ** 2) for i in range(len(Dg_list) - 2)])))
-
-
+   
     def save_curves(self, save_path):
 
         import matplotlib
         matplotlib.rcParams.update({'font.size': 10})
         matplotlib.rcParams['lines.linewidth'] = 2
         matplotlib.style.use('seaborn-darkgrid')
-
-        plt.figure(0)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.g)):
-            plt.plot(self.g[i], markevery=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.legend()
-        plt.savefig(os.path.join(save_path, 'g.png'),bbox_inches="tight")
 
         plt.figure(1)
         fig, ax = plt.subplots()
@@ -379,16 +356,6 @@ class PnP_restoration():
         plt.legend()
         plt.savefig(os.path.join(save_path, 'PSNR.png'),bbox_inches="tight")
 
-        plt.figure(2)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.F)):
-            plt.plot(self.Psi[i], markevery=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.legend()
-        plt.savefig(os.path.join(save_path, 'Liapunov.png'), bbox_inches="tight")
-
         plt.figure(22)
         fig, ax = plt.subplots()
         ax.spines['right'].set_visible(False)
@@ -398,17 +365,6 @@ class PnP_restoration():
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.legend()
         plt.savefig(os.path.join(save_path, 'F.png'), bbox_inches="tight")
-
-        plt.figure(4)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.Dg)):
-            Ds_norm = [np.linalg.norm(np.array(self.Dg[i][j])) for j in range(len(self.Dg[i]))]
-            plt.plot(Ds_norm, linewidth=1.5, markevery=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.legend()
-        plt.savefig(os.path.join(save_path, 'Dg.png'), bbox_inches="tight")
 
         plt.figure(5)
         fig, ax = plt.subplots()
@@ -433,46 +389,6 @@ class PnP_restoration():
         plt.legend()
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         plt.savefig(os.path.join(save_path, 'conv_log2.png'), bbox_inches="tight")
-
-        self.conv_sum = [[np.sum(self.conv[i][:k]) for k in range(1, len(self.conv[i]))] for i in range(len(self.conv))]
-
-        plt.figure(7)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.conv_sum)):
-            plt.plot(self.conv_sum[i], markevery=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.legend()
-        plt.savefig(os.path.join(save_path, 'conv_log_sum.png'), bbox_inches="tight")
-
-
-        plt.figure(8)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.lip_algo)):
-            plt.plot(self.lip_algo[i], '-o', markersize=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.savefig(os.path.join(save_path, 'lip_algo.png'))
-
-        plt.figure(9)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.lip_D)):
-            plt.plot(self.lip_D[i], '-o', markersize=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.savefig(os.path.join(save_path, 'lip_D.png'))
-
-        plt.figure(10)
-        fig, ax = plt.subplots()
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        for i in range(len(self.lip_Dg)):
-            plt.plot(self.lip_Dg[i], '-o', markersize=10)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-        plt.savefig(os.path.join(save_path, 'lip_Dg.png'))
 
 
     def add_specific_args(parent_parser):
